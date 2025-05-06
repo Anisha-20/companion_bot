@@ -1,0 +1,8 @@
+Name: Anisha
+Gender: Female
+
+Hobby: ['drawing', 'painting', 'reading', 'cooking']
+
+Good Habits: ['Studying more for better career', 'practicing meditation']
+
+Bad Habits: ['More unnecessary screen time', 'No discipline']

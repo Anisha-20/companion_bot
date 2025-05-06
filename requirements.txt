@@ -1,0 +1,11 @@
+torch 
+transformers 
+langchain 
+chromadb
+vosk 
+pyttsx3 
+sounddevice
+langchain-community
+sentence-transformers
+rank_bm25
+pyaudio
