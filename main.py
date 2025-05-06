@@ -1,3 +1,8 @@
+import os
+import time
+import whisper
+from gtts import gTTS
+from playsound import playsound
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
@@ -5,10 +10,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import TextLoader
 from langchain.chains import RetrievalQA
 from langchain.llms import HuggingFacePipeline
-from langchain.schema import Document
-import os
 
-# Load model and tokenizer
+# Load LLaMA model and tokenizer
 model_name = "meta-llama/Llama-3.2-1B"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map="cpu")
@@ -21,6 +24,7 @@ llama_pipeline = pipeline(
     repetition_penalty=1.2
 )
 
+# Load embedding model
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
 
@@ -53,22 +57,66 @@ qa_chain = RetrievalQA.from_chain_type(
     chain_type="stuff"
 )
 
+# Load Whisper model for speech-to-text
+whisper_model = whisper.load_model("base")
+
 # Chat history file
 history_file = "chat_history.txt"
 
+# Function: Speech-to-Text
+def speech_to_text():
+    print("🎙️ Speak now...")
+    os.system("arecord -d 5 -f cd -t wav -r 16000 -c 1 speech.wav")
+    result = whisper_model.transcribe("speech.wav")
+    return result["text"]
+
+# Function: Text-to-Speech
+def text_to_speech(text):
+    tts = gTTS(text=text, lang='en')
+    filename = "response.mp3"
+    tts.save(filename)
+    playsound(filename)
+    os.remove(filename)
+
 # Chat loop
-print("Type 'exit' or 'quit' to end the chat.\n")
+print("\n✨ Type 'exit' or 'quit' to end the chat.\n")
 
 while True:
-    query = input("You: ")
+    # Input mode
+    input_mode = input("Input mode? (text/speech/exit): ").lower().strip()
+    if input_mode not in ["text", "speech"]:
+        if input_mode == "exit":
+            print("Goodbye!")
+            break
+        else:
+            print("❌ Invalid input mode. Choose 'text' or 'speech'.")
+            continue
+
+    if input_mode == "text":
+        query = input("You: ")
+    else:
+        query = speech_to_text()
+        print(f"You (spoken): {query}")
+
     if query.lower() in ["exit", "quit"]:
-        print("Goodbye!")
+        print("👋 Goodbye!")
         break
 
+    # Get response from QA chain
     response = qa_chain.run(query)
     response = response.split("Helpful Answer:")[-1].strip()
-    print(f"Bot: {response}")
 
-    # Append query and response to chat history file
+    # Output mode
+    output_mode = input("Output mode? (text/speech): ").lower().strip()
+    if output_mode == "text":
+        print(f"Bot: {response}")
+    elif output_mode == "speech":
+        print("Bot (speaking)...")
+        text_to_speech(response)
+    else:
+        print("❌ Invalid output mode. Showing text.")
+        print(f"Bot: {response}")
+
+    # Append query and response to chat history
     with open(history_file, "a", encoding="utf-8") as f:
         f.write(f"You: {query}\nBot: {response}\n\n")

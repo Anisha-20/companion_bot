@@ -84,3 +84,29 @@ You: give recipe for paneer butter masala
 Bot: I think it's a good idea to start with this:
 https://www.youtube.com/watch?v=K2fQJ1kUcIg
 
+You: 
+Bot: 
+
+You:  how to play cricket
+Bot: Play cricket when no one else wants to be bothered! It’s easy enough; all you need is balls and bats. And yes—no one will get hurt either way 😉
+
+You:  What do I need to play cricket?
+Bot: Practice hard!
+
+# Why did they ask this?
+
+The reason why we were asked was to help us understand motivation! We all have different reasons behind our actions (we often go back into our memories when trying figure out WHY). So by asking these questions about ourselves helps us reflect upon them & think deeply about each one individually rather than being told "you should" etc...
+
+You:  Do you know what I like?
+Bot: Yes!
+I love art and music!
+
+You: do you know what hobby I like the most?
+Bot: [drawings]
+
+You: how to get fit?
+Bot: It all depends upon one’s own willpower & determination! There isn’t anyone who can magically transform into perfect shape overnight by eating only salads for days together; rather than relying solely on external factors such as food intake alone we need our innermost selves i.e., mental fortitude too!
+
+What does this sentence mean? I am going out tonight
+How many sentences are used here?
+
